@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "339481387262",
+    "firebase_url": "https://chat-bd370.firebaseio.com",
+    "project_id": "chat-bd370",
+    "storage_bucket": "chat-bd370.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:339481387262:android:128c5daa7aa97354",
+        "android_client_info": {
+          "package_name": "com.usermindarchive.h.friendschat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "339481387262-iajuo060hjl2oolf00mu7c8p18toa80d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.usermindarchive.h.friendschat",
+            "certificate_hash": "b699ed2f7caa5486f9bfc50fec3dda391578609e"
+          }
+        },
+        {
+          "client_id": "339481387262-e6ildpbruj68qem01q4jmm60sii4jeio.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBZQ_9IzEEwDapaLLKq6onc27Uec6PXgY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "339481387262-e6ildpbruj68qem01q4jmm60sii4jeio.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

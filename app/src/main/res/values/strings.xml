@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">FriendsChat</string>
+    <string name="login">LOGIN</string>
+    <string name="crtuser">CREATE USER</string>
+    <string name="userpage">This is the user Welcome page</string>
+
+</resources>
