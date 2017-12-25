@@ -28,7 +28,7 @@ public class UserModel {
 
 
 
-  private   String status;
+
 
     public String getUsername() {
         return Username;
@@ -40,6 +40,12 @@ public class UserModel {
 
    private String Username;
 
+    public UserModel(String username, String status) {
+        Username = username;
+        this.status = status;
+    }
+
+    private   String status;
 
 
 

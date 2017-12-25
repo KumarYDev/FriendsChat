@@ -11,11 +11,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.usermindarchive.h.friendschat.Model.Dagger.Component;
 import com.usermindarchive.h.friendschat.Model.Dagger.DaggerComponent;
 import com.usermindarchive.h.friendschat.Model.Dagger.FirebaseDependency;
 import com.usermindarchive.h.friendschat.Model.MainClass.Firebase.Firebase;
+import com.usermindarchive.h.friendschat.View.MainClass.GroupChat;
 import com.usermindarchive.h.friendschat.View.MainClass.Login;
 import com.usermindarchive.h.friendschat.View.MainClass.Profile;
 import com.usermindarchive.h.friendschat.View.MainClass.UserWelcome;
@@ -103,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.signout).setVisible(false);
         menu.findItem(R.id.profile).setVisible(false);
+        menu.findItem(R.id.groupchat).setVisible(false);
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -119,6 +122,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.signout:
                 alter();
                 return true;
+            case R.id.groupchat:
+//                groupChat();
+                Toast.makeText(MainActivity.this,"Feature is under working",Toast.LENGTH_LONG).show();
+                return true;
             default:
                 break;
         }
@@ -130,6 +137,12 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main, new Profile());
         transaction.addToBackStack("tag");
+        transaction.commit();
+    }
+    public void groupChat(){
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.main, new GroupChat());
+        transaction.addToBackStack("group");
         transaction.commit();
     }
 

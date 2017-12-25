@@ -245,6 +245,9 @@ public class CreateUser extends Fragment implements ViewInterfaces.CreateUserInt
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // do nothing
+                        String s="";
+                        firebase.UserName(s);
+                        userpage();
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_info)

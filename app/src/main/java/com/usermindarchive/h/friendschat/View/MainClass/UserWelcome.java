@@ -26,12 +26,19 @@ import android.widget.Toast;
 
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.usermindarchive.h.friendschat.Model.MainClass.Firebase.Firebase;
 import com.usermindarchive.h.friendschat.Model.MainClass.RecyclerviewModel.*;
 import com.usermindarchive.h.friendschat.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,6 +59,9 @@ public class UserWelcome extends Fragment {
     DatabaseReference databaseReference;
      BroadcastReceiver broadcastReceiver;
     String userName,userId,userStatus;
+    private DatabaseReference userInfo;
+    List<UserModel> msg=new ArrayList<>();
+    private UserModelAdapter manualAdapter;
 
     @Override
     public void onAttach(Context context) {
@@ -73,16 +83,16 @@ public class UserWelcome extends Fragment {
     public void onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.signout).setVisible(true);
         menu.findItem(R.id.profile).setVisible(true);
+        menu.findItem(R.id.groupchat).setVisible(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
          view=inflater.inflate(R.layout.userpage,container,false);
         ButterKnife.bind(this,view);
-        databaseReference=FirebaseDatabase.getInstance().getReference().child("All User");
-        users.setHasFixedSize(true);
-        users.setLayoutManager(new LinearLayoutManager(context));
-        recy();
+//        recy();
+//        Recycler();
+
         broadcastReceiver=new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -120,7 +130,86 @@ public class UserWelcome extends Fragment {
         return view;
     }
 
+    public void Recycler(){
+        users.setHasFixedSize(true);
+        users.setLayoutManager(new LinearLayoutManager(context));
+        manualAdapter=new UserModelAdapter(msg);
+        users.setAdapter(manualAdapter);
+        userStatus();
+
+    }
+
+    public void userStatus(){
+
+        userInfo= FirebaseDatabase.getInstance().getReference("All User");
+        userInfo.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+//                UserModel mg = dataSnapshot.getValue(UserModel.class);
+//                msg.add(mg);
+//                Log.e("UserData",msg.get(0).getStatus()+"\n"+msg.get(0).getUsername());
+//                manualAdapter.notifyDataSetChanged();
+
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    //Getting the data from snapshot
+                    UserModel person = postSnapshot.getValue(UserModel.class);
+
+                    //add person to your list
+                    msg.add(person);
+                    //create a list view, and add the apapter, passing in your list
+                }
+                //                Log.e("UserData",msg.get(0).getStatus()+"\n"+msg.get(0).getUsername());
+                manualAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+//        userInfo.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                UserModel mg = dataSnapshot.getValue(UserModel.class);
+//                msg.add(mg);
+//                for(DataSnapshot data:dataSnapshot.getChildren()) {
+//
+//
+//                }
+//
+//
+//
+//                manualAdapter.notifyDataSetChanged();
+//
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+    }
+
     public void recy(){
+        databaseReference=FirebaseDatabase.getInstance().getReference().child("All User");
+        users.setHasFixedSize(true);
+        users.setLayoutManager(new LinearLayoutManager(context));
         adapter= new FirebaseRecyclerAdapter<UserModel, UserModelViewHolder>(UserModel.class, R.layout.userinfo,UserModelViewHolder.class,databaseReference) {
             @Override
             protected void populateViewHolder(UserModelViewHolder viewHolder, final UserModel model, int position) {
@@ -176,6 +265,7 @@ public class UserWelcome extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        recy();
 
 
     }
@@ -188,7 +278,7 @@ public class UserWelcome extends Fragment {
         super.onDestroyView();
         ButterKnife.bind(this,view).unbind();
         context.unregisterReceiver(broadcastReceiver);
-        adapter.cleanup();
+//        adapter.cleanup();
 
     }
 

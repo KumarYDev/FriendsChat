@@ -107,6 +107,8 @@ public class Firebase {
 
     public boolean userexits() {
         Boolean user=false;
+//        Log.e("Userdata",mAuth.getCurrentUser().getUid()+"\n"+mAuth.getCurrentUser().getDisplayName()+"\n"+mAuth.getCurrentUser().getEmail());
+
         if(mAuth.getCurrentUser()==null)
             user=true;
         return user;
@@ -114,7 +116,7 @@ public class Firebase {
 
     public void UserName(String s) {
         userData= FirebaseDatabase.getInstance().getReference("All User").child(mAuth.getCurrentUser().getUid());
-        if(s.isEmpty()) {
+        if(s.isEmpty()||s==null) {
            s="Guest"+TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
         }
 
@@ -312,13 +314,22 @@ public class Firebase {
                                     create = true;
 
                                     userData= FirebaseDatabase.getInstance().getReference("All User").child(mAuth.getCurrentUser().getUid());
-                                    userData.child(profile).child("UID").setValue(mAuth.getCurrentUser().getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    userData.child("status").setValue("ONLINE").addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful())
-                                                createUserModel.status(true);
+                                            if (task.isSuccessful()) {
+                                                userData.child(profile).child("UID").setValue(mAuth.getCurrentUser().getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful())
+                                                            createUserModel.status(true);
+
+                                                    }
+                                                });
+                                            }
                                         }
                                     });
+
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.e(TAG, "createUserWithEmail:success"+ TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
 
