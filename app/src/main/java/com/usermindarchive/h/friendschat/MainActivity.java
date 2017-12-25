@@ -158,7 +158,9 @@ public class MainActivity extends AppCompatActivity {
                 .setMessage("Are you sure you want to LOG OUT ?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        firebase.userStatus("OFFLINE");
                         firebase.userLogout();
+
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

@@ -124,13 +124,16 @@ public class CreateUser extends Fragment implements ViewInterfaces.CreateUserInt
 
     public boolean checkpassword(){
 
-        if(password.getText().toString().equals(repassword.getText().toString())&&password.getText().length()<=6) {
+        if(password.getText().toString().equals(repassword.getText().toString())
+                &&password.getText().length()>=6
+
+                ) {
 
             return true;
         }
         else{
-            password.setError("Re-type the Password");
-            repassword.setError("Re-type the Password");
+            password.setError("Password not matching");
+            repassword.setError("Password not matching");
 
 //            Toast.makeText(getActivity(),"Password is not matching",Toast.LENGTH_LONG).show();
             return false;
