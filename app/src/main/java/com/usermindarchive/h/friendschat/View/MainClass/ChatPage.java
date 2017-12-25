@@ -159,6 +159,9 @@ public class ChatPage extends Fragment {
         if(!message.getText().toString().isEmpty()) {
             data.put("message",message.getText().toString());
             firebase.sendMessage(data);
+            message.setText("");
+            chat.scrollToPosition(msg.size());
+
         }
     }
 
