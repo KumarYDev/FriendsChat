@@ -18,6 +18,7 @@ import com.usermindarchive.h.friendschat.Model.Dagger.DaggerComponent;
 import com.usermindarchive.h.friendschat.Model.Dagger.FirebaseDependency;
 import com.usermindarchive.h.friendschat.Model.MainClass.Firebase.Firebase;
 import com.usermindarchive.h.friendschat.View.MainClass.GroupChat;
+import com.usermindarchive.h.friendschat.View.MainClass.GroupCommunity;
 import com.usermindarchive.h.friendschat.View.MainClass.Login;
 import com.usermindarchive.h.friendschat.View.MainClass.Profile;
 import com.usermindarchive.h.friendschat.View.MainClass.UserWelcome;
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         menu.findItem(R.id.signout).setVisible(false);
         menu.findItem(R.id.profile).setVisible(false);
         menu.findItem(R.id.groupchat).setVisible(false);
-
+        menu.findItem(R.id.groupcomm).setVisible(false);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -126,11 +127,22 @@ public class MainActivity extends AppCompatActivity {
 //                groupChat();
                 Toast.makeText(MainActivity.this,"Feature is under working",Toast.LENGTH_LONG).show();
                 return true;
+            case R.id.groupcomm:
+                groupCommunity();
+                Toast.makeText(MainActivity.this,"Feature is under working",Toast.LENGTH_LONG).show();
+                return true;
             default:
                 break;
         }
 
         return false;
+    }
+
+    private void groupCommunity() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.main, new GroupCommunity());
+        transaction.addToBackStack("group");
+        transaction.commit();
     }
 
     public void userinfo(){

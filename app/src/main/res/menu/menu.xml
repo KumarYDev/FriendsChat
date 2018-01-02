@@ -20,5 +20,10 @@
         android:title="GroupChat"
 
         />
+    <item
+        android:id="@+id/groupcomm"
+        android:title="Group Community"
+
+        />
 
 </menu>
