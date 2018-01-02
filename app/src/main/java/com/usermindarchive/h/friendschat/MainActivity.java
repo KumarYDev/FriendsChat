@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.groupcomm:
                 groupCommunity();
-                Toast.makeText(MainActivity.this,"Feature is under working",Toast.LENGTH_LONG).show();
+//                Toast.makeText(MainActivity.this,"Feature is under working",Toast.LENGTH_LONG).show();
                 return true;
             default:
                 break;

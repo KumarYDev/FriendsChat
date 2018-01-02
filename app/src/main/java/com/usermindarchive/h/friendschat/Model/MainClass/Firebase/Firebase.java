@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.usermindarchive.h.friendschat.MainActivity;
 import com.usermindarchive.h.friendschat.Model.MainClass.CreateUser.CreateUserModel;
 import com.usermindarchive.h.friendschat.Model.MainClass.Login.LoginAuth;
+import com.usermindarchive.h.friendschat.Model.MainClass.RecyclerviewModel.GroupuCommMessageModel;
 import com.usermindarchive.h.friendschat.Model.MainClass.RecyclerviewModel.MessageModel;
 
 import java.util.ArrayList;
@@ -119,7 +121,10 @@ public class Firebase {
         if(s.isEmpty()||s==null) {
            s="Guest"+TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
         }
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(s).build();
 
+        mAuth.getCurrentUser().updateProfile(profileUpdates);
             userData.child(username).setValue(s).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -138,8 +143,13 @@ public class Firebase {
         userData.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 name=dataSnapshot.getValue().toString();
+                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                        .setDisplayName(name).build();
+
+                mAuth.getCurrentUser().updateProfile(profileUpdates);
+
+
                 Intent uname=new Intent("action.Update");
                 uname.putExtra("data",name);
                 context.sendBroadcast(uname);
@@ -299,6 +309,43 @@ public class Firebase {
 
     }
 
+    public void sendGroupCommMessage(String s) {
+
+        if(!FirebaseAuth.getInstance().getCurrentUser().getDisplayName().isEmpty()) {
+    
+            FirebaseDatabase.getInstance()
+            .getReference("Group Community")
+            .push()
+            .setValue(new GroupuCommMessageModel(s,
+                    FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
+                    FirebaseAuth.getInstance().getCurrentUser().getUid())
+            );
+
+        }else setusername();
+    }
+
+    private void setusername() {
+        userData= FirebaseDatabase.getInstance().getReference("All User").child(mAuth.getCurrentUser().getUid()).child(username);
+
+        userData.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                name=dataSnapshot.getValue().toString();
+                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                        .setDisplayName(name).build();
+
+                mAuth.getCurrentUser().updateProfile(profileUpdates);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
 
     class Background extends AsyncTask<Integer, Void, Boolean> {
 
@@ -312,6 +359,7 @@ public class Firebase {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     create = true;
+
 
                                     userData= FirebaseDatabase.getInstance().getReference("All User").child(mAuth.getCurrentUser().getUid());
                                     userData.child("status").setValue("ONLINE").addOnCompleteListener(new OnCompleteListener<Void>() {

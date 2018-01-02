@@ -12,20 +12,27 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.usermindarchive.h.friendschat.Model.MainClass.Firebase.Firebase;
 import com.usermindarchive.h.friendschat.Model.MainClass.RecyclerviewModel.GroupCommunityMessageViewAdapter;
+import com.usermindarchive.h.friendschat.Model.MainClass.RecyclerviewModel.GroupuCommMessageModel;
 import com.usermindarchive.h.friendschat.Model.MainClass.RecyclerviewModel.MessageModel;
 import com.usermindarchive.h.friendschat.Model.MainClass.RecyclerviewModel.MessageViewAdapter;
+import com.usermindarchive.h.friendschat.Model.MainClass.RecyclerviewModel.UserModel;
 import com.usermindarchive.h.friendschat.R;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -35,55 +42,63 @@ import butterknife.OnClick;
 public class GroupCommunity extends Fragment {
     Context context;
     private Firebase firebase;
-    @BindView(R.id.message)
+    @BindView(R.id.grpmsg)
     EditText message;
-    @BindView(R.id.send)
+    @BindView(R.id.grpsend)
     Button send;
     private View view;
-    private DatabaseReference retriveMessages;
-    private GroupCommunityMessageViewAdapter adapter;
-    @BindView(R.id.group)RecyclerView chat;
-    private Map data;
 
+    @BindView(R.id.group)RecyclerView chat;
+    private DatabaseReference userInfo;
+    private List<GroupuCommMessageModel> msg=new ArrayList<>();
+    private GroupCommunityMessageViewAdapter manualAdapter;
+    String uid;
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.bind(this,view).unbind();
+
+    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context=context;
         firebase=new Firebase(context);
+        uid=FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.groupcomm,container,false);
+        ButterKnife.bind(this,view);
+        Recycler();
         return view;
+
     }
 
-    public void load(){
-        retriveMessages= FirebaseDatabase.getInstance().getReference("Group Coummunity");
 
-        retriveMessages.addChildEventListener(new ChildEventListener() {
+    public void Recycler(){
+
+
+
+        userInfo= FirebaseDatabase.getInstance().getReference("Group Community");
+        userInfo.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                MessageModel mg=dataSnapshot.getValue(MessageModel.class);
-//                msg.add(mg);
-                adapter.notifyDataSetChanged();
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-            }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    //Getting the data from snapshot
+                    GroupuCommMessageModel person = postSnapshot.getValue(GroupuCommMessageModel.class);
 
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
+                    //add person to your list
+                    msg.add(person);
+                    //create a list view, and add the apapter, passing in your list
+                }
+                //                Log.e("UserData",msg.get(0).getStatus()+"\n"+msg.get(0).getUsername());
+                manualAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -92,26 +107,22 @@ public class GroupCommunity extends Fragment {
             }
         });
 
-    }
-
-    public void Recycler(){
-//        adapter=new GroupCommunityMessageViewAdapter(msg);
         chat.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         layoutManager.setStackFromEnd(true);
+        manualAdapter=new GroupCommunityMessageViewAdapter(msg,uid );
         chat.setLayoutManager(layoutManager);
+        chat.setAdapter(manualAdapter);
 
-        chat.setAdapter(adapter);
-        load();
+
     }
 
-    @OnClick(R.id.send)
-    public void send(){
-        if(!message.getText().toString().isEmpty()) {
-            data.put("message",message.getText().toString());
-            firebase.sendMessage(data);
+    @OnClick(R.id.grpsend)
+    public void sendmsg(){
+        if(!message.getText().toString().trim().isEmpty()) {
+            firebase.sendGroupCommMessage(message.getText().toString());
             message.setText("");
-//            chat.scrollToPosition(msg.size());
+            chat.scrollToPosition(msg.size());
 
         }
     }

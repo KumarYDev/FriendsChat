@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/message"
+        android:id="@+id/grpmsg"
         android:layout_width="295dp"
         android:layout_height="47dp"
 
@@ -26,14 +26,14 @@
         android:hint="Enter Message"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/send"
+        app:layout_constraintEnd_toStartOf="@+id/grpsend"
         app:layout_constraintHorizontal_bias="0.161"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/group"
         app:layout_constraintVertical_bias="0.542" />
 
     <Button
-        android:id="@+id/send"
+        android:id="@+id/grpsend"
         android:layout_width="69dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
