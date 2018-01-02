@@ -3,7 +3,6 @@ package com.usermindarchive.h.friendschat;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Build;
-import android.os.Parcelable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,7 +16,8 @@ import com.usermindarchive.h.friendschat.Model.Dagger.Component;
 import com.usermindarchive.h.friendschat.Model.Dagger.DaggerComponent;
 import com.usermindarchive.h.friendschat.Model.Dagger.FirebaseDependency;
 import com.usermindarchive.h.friendschat.Model.MainClass.Firebase.Firebase;
-import com.usermindarchive.h.friendschat.View.MainClass.GroupChat;
+import com.usermindarchive.h.friendschat.View.MainClass.GroupChatPage;
+import com.usermindarchive.h.friendschat.View.MainClass.GroupChatUserList;
 import com.usermindarchive.h.friendschat.View.MainClass.Login;
 import com.usermindarchive.h.friendschat.View.MainClass.Profile;
 import com.usermindarchive.h.friendschat.View.MainClass.UserWelcome;
@@ -123,8 +123,8 @@ public class MainActivity extends AppCompatActivity {
                 alter();
                 return true;
             case R.id.groupchat:
-//                groupChat();
-                Toast.makeText(MainActivity.this,"Feature is under working",Toast.LENGTH_LONG).show();
+                groupChat();
+//                Toast.makeText(MainActivity.this,"Feature is under working",Toast.LENGTH_LONG).show();
                 return true;
             default:
                 break;
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void groupChat(){
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.main, new GroupChat());
+        transaction.replace(R.id.main, new GroupChatPage());
         transaction.addToBackStack("group");
         transaction.commit();
     }

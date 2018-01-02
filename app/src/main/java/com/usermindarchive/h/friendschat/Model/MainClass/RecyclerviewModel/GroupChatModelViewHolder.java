@@ -17,9 +17,15 @@ public class GroupChatModelViewHolder extends RecyclerView.ViewHolder {
 
     View view;
     TextView name,state;
+
+
+
     CheckBox checkBox;
 
 
+    public CheckBox getCheckBox() {
+        return checkBox;
+    }
     public GroupChatModelViewHolder(View itemView) {
         super(itemView);
         name=itemView.findViewById(R.id.userid);

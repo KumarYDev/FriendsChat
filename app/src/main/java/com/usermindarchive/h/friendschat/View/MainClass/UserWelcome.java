@@ -98,7 +98,7 @@ public class UserWelcome extends Fragment {
             public void onReceive(Context context, Intent intent) {
 
                 Username=intent.getStringExtra("data");
-
+                recy();
             }
         };
 
@@ -265,7 +265,7 @@ public class UserWelcome extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        recy();
+//        recy();
 
 
     }
