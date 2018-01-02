@@ -84,21 +84,30 @@ public class GroupCommunity extends Fragment {
 
 
         userInfo= FirebaseDatabase.getInstance().getReference("Group Community");
-        userInfo.addValueEventListener(new ValueEventListener() {
+        userInfo.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                GroupuCommMessageModel person = dataSnapshot.getValue(GroupuCommMessageModel.class);
 
-
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    //Getting the data from snapshot
-                    GroupuCommMessageModel person = postSnapshot.getValue(GroupuCommMessageModel.class);
-
-                    //add person to your list
-                    msg.add(person);
-                    //create a list view, and add the apapter, passing in your list
-                }
-                //                Log.e("UserData",msg.get(0).getStatus()+"\n"+msg.get(0).getUsername());
+                //add person to your list
+                msg.add(person);
                 manualAdapter.notifyDataSetChanged();
+                chat.scrollToPosition(msg.size()-1);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
@@ -106,6 +115,28 @@ public class GroupCommunity extends Fragment {
 
             }
         });
+//        userInfo.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//
+//                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+//                    //Getting the data from snapshot
+//                    GroupuCommMessageModel person = postSnapshot.getValue(GroupuCommMessageModel.class);
+//
+//                    //add person to your list
+//                    msg.add(person);
+//                    //create a list view, and add the apapter, passing in your list
+//                }
+//                //                Log.e("UserData",msg.get(0).getStatus()+"\n"+msg.get(0).getUsername());
+//                manualAdapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
         chat.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
@@ -122,7 +153,7 @@ public class GroupCommunity extends Fragment {
         if(!message.getText().toString().trim().isEmpty()) {
             firebase.sendGroupCommMessage(message.getText().toString());
             message.setText("");
-            chat.scrollToPosition(msg.size());
+            chat.scrollToPosition(msg.size()-1);
 
         }
     }
