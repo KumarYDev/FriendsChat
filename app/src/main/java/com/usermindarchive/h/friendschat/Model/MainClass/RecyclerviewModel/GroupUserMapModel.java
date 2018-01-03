@@ -7,6 +7,10 @@ package com.usermindarchive.h.friendschat.Model.MainClass.RecyclerviewModel;
 public class GroupUserMapModel {
     String UserID;
 
+    public GroupUserMapModel() {
+        super();
+    }
+
     public String getUserID() {
         return UserID;
     }

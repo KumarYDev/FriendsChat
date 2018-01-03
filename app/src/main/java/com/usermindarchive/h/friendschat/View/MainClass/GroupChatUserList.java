@@ -212,8 +212,11 @@ public class GroupChatUserList extends Fragment {
                     if(input.getText().toString().trim().isEmpty()){
                         groupname();
                         Toast.makeText(context,"Enter the Group Name",Toast.LENGTH_LONG).show();
-                    }else
-                    firebase.createGroup(input.getText().toString(),userDetails);
+                    }else {
+                        firebase.createGroup(input.getText().toString().trim(), userDetails);
+                        getFragmentManager().popBackStack();
+
+                    }
 
                 }
             })

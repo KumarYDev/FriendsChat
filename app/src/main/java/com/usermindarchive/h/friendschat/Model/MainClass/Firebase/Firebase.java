@@ -222,8 +222,32 @@ public class Firebase {
 
     public void createGroup(String name, Map<String, GroupUserMapModel> userDetails){
         createGroup=FirebaseDatabase.getInstance().getReference("Group Chat");
+        DatabaseReference pushid=createGroup.push();
+        String push_id=pushid.getKey();
+
+        Map details=new HashMap();
+        for(GroupUserMapModel map: userDetails.values()){
+            details.put(push_id+"/Users/"+map.getUserID().toString()+"/UserName",map.getUserName().toString());
+        }
+
+        details.put(push_id+"/name",name);
+        createGroup.updateChildren(details,new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if(databaseError!=null){
+                    Log.e("Error-Chat",databaseError.getMessage().toString());
+                }
+            }
+        });
 
     }
+    public void usersGroup(String id,String name){
+        Map user=new HashMap();
+        user.put("UserName",name);
+
+
+    }
+
     public void sendMessage(Map data) {
         sendMessage=FirebaseDatabase.getInstance().getReference("Chat").child("Messages");
 
@@ -311,6 +335,10 @@ public class Firebase {
 
 
 
+    }
+
+    public String getUserID() {
+        return mAuth.getCurrentUser().getUid().toString();
     }
 
 

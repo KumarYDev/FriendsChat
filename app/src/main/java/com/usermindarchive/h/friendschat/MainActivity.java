@@ -10,14 +10,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.usermindarchive.h.friendschat.Model.Dagger.Component;
 import com.usermindarchive.h.friendschat.Model.Dagger.DaggerComponent;
 import com.usermindarchive.h.friendschat.Model.Dagger.FirebaseDependency;
 import com.usermindarchive.h.friendschat.Model.MainClass.Firebase.Firebase;
-import com.usermindarchive.h.friendschat.View.MainClass.GroupChatPage;
-import com.usermindarchive.h.friendschat.View.MainClass.GroupChatUserList;
+import com.usermindarchive.h.friendschat.View.MainClass.GroupAllPage;
 import com.usermindarchive.h.friendschat.View.MainClass.Login;
 import com.usermindarchive.h.friendschat.View.MainClass.Profile;
 import com.usermindarchive.h.friendschat.View.MainClass.UserWelcome;
@@ -141,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void groupChat(){
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.main, new GroupChatPage());
+        transaction.replace(R.id.main, new GroupAllPage());
         transaction.addToBackStack("group");
         transaction.commit();
     }
