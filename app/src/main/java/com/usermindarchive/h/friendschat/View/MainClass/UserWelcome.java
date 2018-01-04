@@ -90,7 +90,7 @@ public class UserWelcome extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
          view=inflater.inflate(R.layout.userpage,container,false);
         ButterKnife.bind(this,view);
-//        recy();
+        recy();
 //        Recycler();
 
         broadcastReceiver=new BroadcastReceiver() {
@@ -98,7 +98,7 @@ public class UserWelcome extends Fragment {
             public void onReceive(Context context, Intent intent) {
 
                 Username=intent.getStringExtra("data");
-                recy();
+//                recy();
             }
         };
 
