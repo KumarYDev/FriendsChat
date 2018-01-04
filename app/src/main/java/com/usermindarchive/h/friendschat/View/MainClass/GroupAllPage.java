@@ -122,7 +122,7 @@ public class GroupAllPage extends Fragment {
             }
         });
 
-        adapter=new GroupAllPageAdapter(data);
+        adapter=new GroupAllPageAdapter(data,getFragmentManager());
         groupList.setHasFixedSize(true);
         groupList.setLayoutManager(new LinearLayoutManager(context));
 

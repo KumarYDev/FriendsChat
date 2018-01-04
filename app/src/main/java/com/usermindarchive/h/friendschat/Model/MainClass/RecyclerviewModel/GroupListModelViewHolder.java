@@ -36,9 +36,4 @@ public class GroupListModelViewHolder extends RecyclerView.ViewHolder {
     }
 
 
-
-    public void hide() {
-        name.setVisibility(View.GONE);
-
-    }
 }

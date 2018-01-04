@@ -24,6 +24,7 @@ import com.usermindarchive.h.friendschat.MainActivity;
 import com.usermindarchive.h.friendschat.Model.MainClass.CreateUser.CreateUserModel;
 import com.usermindarchive.h.friendschat.Model.MainClass.Login.LoginAuth;
 import com.usermindarchive.h.friendschat.Model.MainClass.RecyclerviewModel.GroupUserMapModel;
+import com.usermindarchive.h.friendschat.Model.MainClass.RecyclerviewModel.GroupuSelectMessageModel;
 import com.usermindarchive.h.friendschat.Model.MainClass.RecyclerviewModel.MessageModel;
 
 import java.util.ArrayList;
@@ -339,6 +340,53 @@ public class Firebase {
 
     public String getUserID() {
         return mAuth.getCurrentUser().getUid().toString();
+    }
+
+    public void sendGroupSelectMessage(String message, String groupid) {
+        if(!FirebaseAuth.getInstance().getCurrentUser().getDisplayName().isEmpty()) {
+
+            FirebaseDatabase.getInstance()
+                    .getReference("Group Chat")
+                    .child(groupid)
+                    .child("messages")
+                    .push()
+                    .setValue(new GroupuSelectMessageModel(message,
+                            FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
+                            FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    );
+
+        }else {
+            userData= FirebaseDatabase.getInstance().getReference("All User").child(mAuth.getCurrentUser().getUid()).child(username);
+
+            userData.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    name=dataSnapshot.getValue().toString();
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(name).build();
+
+                    mAuth.getCurrentUser().updateProfile(profileUpdates);
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            FirebaseDatabase.getInstance()
+                    .getReference("Group Chat")
+                    .child(groupid)
+                    .child("messages")
+                    .push()
+                    .setValue(new GroupuSelectMessageModel(message,
+                            FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
+                            FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    );
+
+
+        };
     }
 
 
