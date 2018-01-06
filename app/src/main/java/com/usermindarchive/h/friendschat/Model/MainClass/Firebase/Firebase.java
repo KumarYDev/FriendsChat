@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,6 +24,7 @@ import com.usermindarchive.h.friendschat.MainActivity;
 import com.usermindarchive.h.friendschat.Model.MainClass.CreateUser.CreateUserModel;
 import com.usermindarchive.h.friendschat.Model.MainClass.Login.LoginAuth;
 import com.usermindarchive.h.friendschat.Model.MainClass.RecyclerviewModel.GroupUserMapModel;
+import com.usermindarchive.h.friendschat.Model.MainClass.RecyclerviewModel.GroupuCommMessageModel;
 import com.usermindarchive.h.friendschat.Model.MainClass.RecyclerviewModel.GroupuSelectMessageModel;
 import com.usermindarchive.h.friendschat.Model.MainClass.RecyclerviewModel.MessageModel;
 
@@ -54,8 +56,7 @@ public class Firebase {
     Boolean status=false;
     String name;
     Map data;
-
-
+    private DatabaseReference createGroup;
 
 
     public Firebase(Context context) {
