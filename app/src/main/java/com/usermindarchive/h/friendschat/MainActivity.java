@@ -16,7 +16,7 @@ import com.usermindarchive.h.friendschat.Model.Dagger.DaggerComponent;
 import com.usermindarchive.h.friendschat.Model.Dagger.FirebaseDependency;
 import com.usermindarchive.h.friendschat.Model.MainClass.Firebase.Firebase;
 import com.usermindarchive.h.friendschat.View.MainClass.GroupAllPage;
-import com.usermindarchive.h.friendschat.View.MainClass.GroupChat;
+//import com.usermindarchive.h.friendschat.View.MainClass.GroupChat;
 import com.usermindarchive.h.friendschat.View.MainClass.GroupCommunity;
 import com.usermindarchive.h.friendschat.View.MainClass.Login;
 import com.usermindarchive.h.friendschat.View.MainClass.Profile;
