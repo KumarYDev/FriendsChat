@@ -12,7 +12,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -51,12 +50,12 @@ public class Firebase {
     DatabaseReference userstatus;
     DatabaseReference sendMessage,retriveMessages;
 
-
     String profile="Profile",message="Message",username="Username";
     Boolean status=false;
     String name;
     Map data;
-    private DatabaseReference createGroup;
+
+
 
 
     public Firebase(Context context) {
@@ -119,7 +118,7 @@ public class Firebase {
 
     public void UserName(String s) {
         userData= FirebaseDatabase.getInstance().getReference("All User").child(mAuth.getCurrentUser().getUid());
-        if(s.trim().isEmpty()||s==null) {
+        if(s.isEmpty()||s==null) {
            s="Guest"+TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
         }
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
@@ -338,6 +337,43 @@ public class Firebase {
 
     }
 
+    public void sendGroupCommMessage(String s) {
+
+        if(!FirebaseAuth.getInstance().getCurrentUser().getDisplayName().isEmpty()) {
+
+            FirebaseDatabase.getInstance()
+            .getReference("Group Community")
+            .push()
+            .setValue(new GroupuCommMessageModel(s,
+                    FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
+                    FirebaseAuth.getInstance().getCurrentUser().getUid())
+            );
+
+        }else setusername();
+    }
+
+    private void setusername() {
+        userData= FirebaseDatabase.getInstance().getReference("All User").child(mAuth.getCurrentUser().getUid()).child(username);
+
+        userData.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                name=dataSnapshot.getValue().toString();
+                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                        .setDisplayName(name).build();
+
+                mAuth.getCurrentUser().updateProfile(profileUpdates);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
     public String getUserID() {
         return mAuth.getCurrentUser().getUid().toString();
     }
@@ -402,6 +438,7 @@ public class Firebase {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     create = true;
+
                                     userData= FirebaseDatabase.getInstance().getReference("All User").child(mAuth.getCurrentUser().getUid());
                                     userData.child("status").setValue("ONLINE").addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override

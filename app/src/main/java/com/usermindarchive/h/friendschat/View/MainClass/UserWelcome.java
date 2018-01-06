@@ -83,6 +83,7 @@ public class UserWelcome extends Fragment {
     public void onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.signout).setVisible(true);
         menu.findItem(R.id.profile).setVisible(true);
+        menu.findItem(R.id.groupcomm).setVisible(true);
         menu.findItem(R.id.groupchat).setVisible(true);
     }
 
