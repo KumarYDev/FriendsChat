@@ -117,6 +117,7 @@ public class ChatPage extends Fragment {
                 MessageModel mg=dataSnapshot.getValue(MessageModel.class);
                 msg.add(mg);
                 adapter.notifyDataSetChanged();
+                chat.scrollToPosition(msg.size()-1);
 
             }
 
@@ -160,7 +161,7 @@ public class ChatPage extends Fragment {
             data.put("message",message.getText().toString());
             firebase.sendMessage(data);
             message.setText("");
-            chat.scrollToPosition(msg.size());
+            chat.scrollToPosition(msg.size()-1);
 
         }
     }

@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.usermindarchive.h.friendschat.MainActivity;
 import com.usermindarchive.h.friendschat.Model.MainClass.CreateUser.CreateUserModel;
 import com.usermindarchive.h.friendschat.Model.MainClass.Login.LoginAuth;
@@ -57,6 +58,8 @@ public class Firebase {
     String name;
     Map data;
     private DatabaseReference createGroup;
+    private String token;
+    private DatabaseReference deviceToken;
 
 
     public Firebase(Context context) {
@@ -103,6 +106,7 @@ public class Firebase {
 
     public void userLogout() {
         mAuth.signOut();
+        removeDevice();
         Log.e("userLoggin","User Logged Out");
         mainActivity.loginpage();
 
@@ -112,9 +116,42 @@ public class Firebase {
         Boolean user=false;
 //        Log.e("Userdata",mAuth.getCurrentUser().getUid()+"\n"+mAuth.getCurrentUser().getDisplayName()+"\n"+mAuth.getCurrentUser().getEmail());
 
-        if(mAuth.getCurrentUser()==null)
-            user=true;
+        if(mAuth.getCurrentUser()==null) {
+            user = true;
+
+        }else deviceToken();
         return user;
+    }
+
+    private void deviceToken() {
+        token= FirebaseInstanceId.getInstance().getToken();
+        deviceToken=FirebaseDatabase.getInstance().getReference("All User").child(mAuth.getCurrentUser().getUid()).child("Devices");
+//Checking  device is already registered or not
+//        deviceToken.child(token).setValue(token);
+        deviceToken.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    if (!dataSnapshot.child(token).exists()) {
+                        Log.e("Token is present","No");
+                        deviceToken.child(token).setValue(token);
+                    }else{
+                        Log.e("Token is present","YES");
+                    }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    private void removeDevice() {
+        deviceToken.child(token).removeValue();
     }
 
     public void UserName(String s) {
@@ -491,6 +528,8 @@ public class Firebase {
 
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.e(TAG, "signInWithEmail:success");
+                                    mAuth = FirebaseAuth.getInstance();
+                                    deviceToken();
                                     sign = true;
                                 } else {
                                     loginModel.Status(false);
