@@ -99,6 +99,7 @@ msg.clear();
                 }
                 //                Log.e("UserData",msg.get(0).getStatus()+"\n"+msg.get(0).getUsername());
                 manualAdapter.notifyDataSetChanged();
+                chat.scrollToPosition(msg.size()-1);
             }
 
             @Override
